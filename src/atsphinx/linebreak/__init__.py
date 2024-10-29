@@ -36,6 +36,8 @@ def setup(app: Sphinx):  # noqa: D103
     app.connect("doctree-read", inject_line_break)
     app.add_node(line_break, html=(visit_line_break, depart_line_break))
     return {
+        "version": __version__,
+        "env_version": 1,
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
