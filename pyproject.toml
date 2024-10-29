@@ -46,8 +46,11 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "atsphinx-mini18n",
+    "beautifulsoup4>=4.12.3",
     "esbonio",
     "furo",
+    "lxml>=5.3.0",
+    "myst-parser>=3.0.1",
     "pytest",
     "sphinx-autobuild",
     "sphinx-intl",
