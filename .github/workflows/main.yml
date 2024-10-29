@@ -1,0 +1,70 @@
+name: 'Run CI jobs'
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * 5'  # 18:00 on Friday JST
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v2
+      - name: Lint by pre-commit
+        run: |
+          uv sync --frozen --all-extras
+          uvx pre-commit run --all-files
+  source-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - '3.9'
+          - '3.10'
+          - '3.11'
+          - '3.12'
+          - '3.13'
+        workspace: ['locked', 'latest']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v2
+      - uses: actions/setup-python@v5
+        id: 'setup-python'
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: 'Configure env as locked deps by uv.lock'
+        run: |
+          uv sync --frozen --python='${{ steps.setup-python.outputs.python-path }}'
+        if: ${{ matrix.workspace == 'locked'}}
+      - name: 'Configure env as latest deps on PyPI'
+        run: |
+          uv sync -U --python='${{ steps.setup-python.outputs.python-path }}'
+        if: ${{ matrix.workspace == 'latest'}}
+      - name: 'Run tests'
+        run: |
+          uv run pytest
+  doc-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v2
+      - uses: arduino/setup-task@v2
+      - name: Run tests
+        run: |
+          task setup docs:build-linkcheck docs:build-dirhtml
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v2
+      - name: Build package
+        run: |
+          uv build
+          ls -l dist
