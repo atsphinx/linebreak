@@ -2,9 +2,13 @@
 Change logs
 ===========
 
-v0.0.0
+v0.1.0
 ======
 
-:date: 2024-10-29 (JST)
+:Date: 2024-10-31 (JST)
 
-Initial commit.
+Features
+--------
+
+* Implement feature as very simple approach.
+* There are not configurations.

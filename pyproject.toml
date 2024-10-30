@@ -1,6 +1,6 @@
 [project]
 name = "atsphinx-linebreak"
-version = "0.0.0"
+version = "0.1.0"
 description = "Enable line-break for everywhere."
 authors = [{name = "Kazuya Takei", email = "myself@attakei.net"}]
 license = "Apache-2.0"
