@@ -12,6 +12,7 @@ class line_break(nodes.Element, nodes.General):  # noqa: D101
 
 def visit_line_break(self, node: line_break):
     """Inject br tag (html only)."""
+    # NOTE: It can change inserting token by configuration.
     self.body.append("<br>")
 
 
@@ -22,7 +23,10 @@ def depart_line_break(self, node: line_break):
 
 def inject_line_break(app: Sphinx, doctree: nodes.document):
     """Split text by line-break and inject marker node."""
+    # NOTE: doctree["source"] has file path of source.
+    # If it want to change proc by file type, see this.
     for text in doctree.findall(nodes.Text):
+        # NOTE: This may not catch CR+LF (windows) pattern.
         if "\n" not in text:
             continue
         splitted = [(nodes.Text(t), line_break()) for t in text.split("\n")]
