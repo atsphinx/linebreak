@@ -43,3 +43,12 @@ Others
 ------
 """
 
+[[files]]
+path = ".github/release-body.md"
+search = "Release atsphinx-linebreak v{{ current_version }}"
+replace = "Release atsphinx-linebreak v{{ new_version }}"
+
+[[files]]
+path = ".github/release-body.md"
+search = "- Changelog is https://github.com/atsphinx/linebreak/blob/v{{ current_version }}/CHANGES.rst"
+replace = "- Changelog is https://github.com/atsphinx/linebreak/blob/v{{ new_version }}/CHANGES.rst"
