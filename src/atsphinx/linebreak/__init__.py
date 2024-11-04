@@ -30,7 +30,7 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
         if "\n" not in text:
             continue
         splitted = [(nodes.Text(t), line_break()) for t in text.split("\n")]
-        items = [item for parts in splitted for item in parts]
+        items = [item for parts in splitted for item in parts][:-1]
         p = text.parent
         pos = p.children.index(text)
         p.children.remove(text)
