@@ -32,7 +32,10 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
         splitted = [(nodes.Text(t), line_break()) for t in text.split("\n")]
         items = [item for parts in splitted for item in parts]
         p = text.parent
-        p.children = items[:-1]
+        pos = p.children.index(text)
+        p.children.remove(text)
+        for idx, item in enumerate(items):
+            p.children.insert(pos + idx, item)
 
 
 def setup(app: Sphinx):  # noqa: D103
