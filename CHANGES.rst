@@ -2,6 +2,16 @@
 Change logs
 ===========
 
+v0.1.2
+======
+
+:Date: 2024-11-04 (JST)
+
+Fixes
+-----
+
+* Remove duplicated linebreak nodes.
+
 v0.1.1
 ======
 
