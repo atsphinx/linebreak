@@ -26,16 +26,52 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
     # NOTE: doctree["source"] has file path of source.
     # If it want to change proc by file type, see this.
     for text in doctree.findall(nodes.Text):
-        # NOTE: This may not catch CR+LF (windows) pattern.
-        if "\n" not in text:
+        # Check if the parent of the text node is a literal_block.
+        # If so, skip processing to preserve code block structure.
+        if isinstance(text.parent, nodes.literal_block):
             continue
-        splitted = [(nodes.Text(t), line_break()) for t in text.split("\n")]
-        items = [item for parts in splitted for item in parts][:-1]
-        p = text.parent
-        pos = p.children.index(text)
-        p.children.remove(text)
-        for idx, item in enumerate(items):
-            p.children.insert(pos + idx, item)
+
+        # NOTE: This may not catch CR+LF (windows) pattern.
+        # Consider using text.astext().splitlines() for robust line splitting.
+        if "\n" not in text.astext():  # Use astext() for reliable newline check
+            continue
+
+        # It's generally safer to work with copies or build a new list of nodes
+        # rather than modifying the list while iterating or indexing into it.
+        current_parent = text.parent
+        if not current_parent:
+            continue
+
+        original_text_content = text.astext()
+        lines = original_text_content.split("\n")
+
+        # Only proceed if there are actual line breaks resulting in multiple lines
+        if len(lines) <= 1 and not original_text_content.endswith("\n"):
+            continue
+
+        new_nodes = []
+        for i, line_content in enumerate(lines):
+            if line_content:  # Add text node only if there is content
+                new_nodes.append(nodes.Text(line_content))
+
+            # Add line_break node after each line except the last one,
+            # or if the original text ended with a newline.
+            if i == len(lines) - 1:
+                if len(lines) == 1 or not original_text_content.endswith("\n"):
+                    continue
+            # Ensure not to add <br> if it's the very last empty string from a trailing newline
+            # unless there was content before it.
+            if line_content or i < len(lines) - 1:
+                new_nodes.append(line_break())
+
+        if not new_nodes:
+            continue
+
+        # Replace the original text node with the new sequence of text and line_break nodes
+        text_pos = current_parent.index(text)
+        current_parent.pop(text_pos)
+        for i, new_node in enumerate(new_nodes):
+            current_parent.insert(text_pos + i, new_node)
 
 
 def setup(app: Sphinx):  # noqa: D103
