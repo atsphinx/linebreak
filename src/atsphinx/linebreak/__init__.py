@@ -35,7 +35,7 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
         # Consider using text.astext().splitlines() for robust line splitting.
         if "\n" not in text.astext():  # Use astext() for reliable newline check
             continue
-        
+
         # It's generally safer to work with copies or build a new list of nodes
         # rather than modifying the list while iterating or indexing into it.
         current_parent = text.parent
@@ -44,7 +44,7 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
 
         original_text_content = text.astext()
         lines = original_text_content.split("\n")
-        
+
         # Only proceed if there are actual line breaks resulting in multiple lines
         if len(lines) <= 1 and not original_text_content.endswith("\n"):
             continue
@@ -55,12 +55,16 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
                 new_nodes.append(nodes.Text(line_content))
             # Add line_break node after each line except the last one,
             # or if the original text ended with a newline.
-            if i < len(lines) - 1 or (i == len(lines) - 1 and original_text_content.endswith("\n") and len(lines) > 1):
-                 # Ensure not to add <br> if it's the very last empty string from a trailing newline
-                 # unless there was content before it.
-                if line_content or i < len(lines) -1 :
+            if i < len(lines) - 1 or (
+                i == len(lines) - 1
+                and original_text_content.endswith("\n")
+                and len(lines) > 1
+            ):
+                # Ensure not to add <br> if it's the very last empty string from a trailing newline
+                # unless there was content before it.
+                if line_content or i < len(lines) - 1:
                     new_nodes.append(line_break())
-        
+
         if not new_nodes:
             continue
 
