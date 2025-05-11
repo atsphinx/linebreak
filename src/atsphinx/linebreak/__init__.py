@@ -53,17 +53,16 @@ def inject_line_break(app: Sphinx, doctree: nodes.document):
         for i, line_content in enumerate(lines):
             if line_content:  # Add text node only if there is content
                 new_nodes.append(nodes.Text(line_content))
+
             # Add line_break node after each line except the last one,
             # or if the original text ended with a newline.
-            if i < len(lines) - 1 or (
-                i == len(lines) - 1
-                and original_text_content.endswith("\n")
-                and len(lines) > 1
-            ):
-                # Ensure not to add <br> if it's the very last empty string from a trailing newline
-                # unless there was content before it.
-                if line_content or i < len(lines) - 1:
-                    new_nodes.append(line_break())
+            if i == len(lines) - 1:
+                if len(lines) == 1 or not original_text_content.endswith("\n"):
+                    continue
+            # Ensure not to add <br> if it's the very last empty string from a trailing newline
+            # unless there was content before it.
+            if line_content or i < len(lines) - 1:
+                new_nodes.append(line_break())
 
         if not new_nodes:
             continue
