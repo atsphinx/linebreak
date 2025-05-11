@@ -2,6 +2,18 @@
 Change logs
 ===========
 
+v0.1.3
+======
+
+:Date: 2025-05-11 (Asia/Tokyo)
+
+Fixes
+-----
+
+* fix that syntax highlighting is broken in code-block
+  by `peacock0803sz <https://github.com/peacock0803sz>`_
+  on `#3 <https://github.com/atsphinx/linebreak/pull/3>`_.
+
 v0.1.2
 ======
 

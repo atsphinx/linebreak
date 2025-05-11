@@ -3,7 +3,7 @@
 from docutils import nodes
 from sphinx.application import Sphinx
 
-__version__ = "0.0.0"
+__version__ = "0.1.3"
 
 
 class line_break(nodes.Element, nodes.General):  # noqa: D101
