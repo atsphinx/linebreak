@@ -2,15 +2,25 @@
 
 ## Installation
 
-```{todo} Write it
+You can install this from PyPI.
+
+```console
+pip install atsphinx-linebreak
 ```
 
 ## Usage
 
-```{todo} Write it
+Add `extensions` of your `conf.py`.
+
+```python
+
+extensions = [
+    # ... other extensions ...
+    "atsphinx.linebreak",  # <- ADD!
+    # ... other extensions ...
+]
 ```
 
 ## Configuration
 
-```{todo} Write it
-```
+This extension does not have configuration for behavior.
